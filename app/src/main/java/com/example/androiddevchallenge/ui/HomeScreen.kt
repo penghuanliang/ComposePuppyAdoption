@@ -12,17 +12,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.androiddevchallenge.data.DemoDataProvider
 import com.example.androiddevchallenge.data.Puppy
+import com.example.androiddevchallenge.vm.NavViewModel
 
 @Composable
-fun HomeScreen() = VerticalListView()
+fun HomeScreen(vm: NavViewModel) = VerticalListView(vm)
 
-@Preview
 @Composable
-private fun VerticalListView() {
+private fun VerticalListView(vm: NavViewModel) {
     val bannerList = remember { DemoDataProvider.banner }
     val puppyList = remember { DemoDataProvider.puppyList }
     val bannerListState = rememberLazyListState()
-    val onClickItem: (Puppy) -> Unit = {}
+    val onClickItem: (Puppy) -> Unit = { vm.navigateToDetail(it) }
 
     LazyColumn {
         item {

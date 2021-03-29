@@ -22,6 +22,7 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModelProvider
@@ -43,19 +44,26 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun onBackPressed() {
+        if (!vm.onBack()) {
+            super.onBackPressed()
+        }
+
+    }
 }
 
 // Start building your app here!
 @Composable
 fun MyApp(vm: NavViewModel) {
 
-    val curScreen =  vm.curScreen.observeAsState(Screen.HomeScreen)
+    val curScreen by vm.curScreen.observeAsState(Screen.HomeScreen)
 
     Crossfade(curScreen) {
         Surface(color = MaterialTheme.colors.background) {
             when (curScreen) {
-                is Screen.HomeScreen ->HomeScreen()
-                is Screen.DetailScreen -> DetailScreen(curScreen.puppy)
+                is Screen.HomeScreen -> HomeScreen(vm)
+                is Screen.DetailScreen -> DetailScreen((curScreen as Screen.DetailScreen).puppy)
             }
         }
     }
